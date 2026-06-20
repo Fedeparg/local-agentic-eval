@@ -2,7 +2,7 @@
 
 A **ReAct agent** with a **concurrent evaluation harness**, built in Go with [Ollama](https://ollama.com) as the local LLM backend.
 
-This project was completed as a university practice in Applied AI Engineering, covering three pillars of the discipline: **agentic AI**, **LLM evaluation**, and **idiomatic concurrency in Go**.
+Built as a self-directed learning project to explore three pillars of applied AI engineering: **agentic AI**, **LLM evaluation**, and **idiomatic concurrency in Go**.
 
 ---
 
