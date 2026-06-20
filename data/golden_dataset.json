@@ -1,0 +1,256 @@
+{
+  "cases": [
+    {
+      "id": "calc-001",
+      "task": "Compute the result of 15 multiplied by 23. Use the calculator tool.",
+      "expected_output": {
+        "final_answer": "345",
+        "tools_used": ["calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "345"
+        },
+        "llm_judge": {
+          "rubric": "The agent must: (1) use the calculator tool with the expression '15 * 23', (2) obtain the exact result 345, (3) present the answer clearly. Penalize if the agent answers without using tools or if the result is incorrect.",
+          "score_axes": ["correctness", "tool_use", "clarity"]
+        }
+      }
+    },
+    {
+      "id": "calc-002",
+      "task": "An LLM service charges $3.00 per 1500 tokens. How much does it cost to process a single token? Use the calculator and answer in dollars.",
+      "expected_output": {
+        "final_answer": "0.002",
+        "tools_used": ["calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "0.002"
+        },
+        "llm_judge": {
+          "rubric": "The agent must compute 3.00 / 1500 = 0.002. Check that the math expression is correct and that the result is expressed in dollars. Penalize if the result is incorrect or if the agent does not use the calculator.",
+          "score_axes": ["correctness", "tool_use", "reasoning"]
+        }
+      }
+    },
+    {
+      "id": "calc-003",
+      "task": "You have 3 GPU servers. Each one processes 1200 requests per day at a cost of $0.05 per request. How much do you pay in total per day? Use the calculator step by step.",
+      "expected_output": {
+        "final_answer": "180",
+        "tools_used": ["calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "180"
+        },
+        "llm_judge": {
+          "rubric": "The agent must compute 3 * 1200 * 0.05 = 180, possibly in two steps (3*1200=3600, then 3600*0.05=180). Evaluate whether the reasoning is correct and clear. Penalize if the result is incorrect.",
+          "score_axes": ["correctness", "reasoning", "tool_use"]
+        }
+      }
+    },
+    {
+      "id": "lookup-001",
+      "task": "What is the capital of France? Look up the answer in the knowledge base.",
+      "expected_output": {
+        "final_answer": "Paris",
+        "tools_used": ["lookup"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "Paris"
+        },
+        "llm_judge": {
+          "rubric": "The agent must use the lookup tool with a query related to 'capital of France' and obtain 'Paris'. Penalize if the agent answers from memory without using lookup, or if the answer is incorrect.",
+          "score_axes": ["correctness", "tool_use"]
+        }
+      }
+    },
+    {
+      "id": "lookup-002",
+      "task": "Who created the Python programming language? Look it up in the knowledge base.",
+      "expected_output": {
+        "final_answer": "Guido van Rossum",
+        "tools_used": ["lookup"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "Guido van Rossum"
+        },
+        "llm_judge": {
+          "rubric": "The agent must use lookup to find that Python was created by Guido van Rossum. Penalize if it answers without using the tool or if the name is incorrect.",
+          "score_axes": ["correctness", "tool_use"]
+        }
+      }
+    },
+    {
+      "id": "lookup-003",
+      "task": "In what year was the 'Attention is All You Need' paper, which introduced the Transformer architecture, published? Look it up in the knowledge base.",
+      "expected_output": {
+        "final_answer": "2017",
+        "tools_used": ["lookup"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "2017"
+        },
+        "llm_judge": {
+          "rubric": "The agent must use lookup with a query related to 'Transformer' or 'Attention is All You Need' and obtain the year 2017. This fact is relevant to AI — penalize especially if the year is incorrect.",
+          "score_axes": ["correctness", "tool_use", "query_quality"]
+        }
+      }
+    },
+    {
+      "id": "lookup-004",
+      "task": "At what temperature does water boil at sea level? Use the knowledge base.",
+      "expected_output": {
+        "final_answer": "100 degrees Celsius",
+        "tools_used": ["lookup"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "regex",
+          "value": "100"
+        },
+        "llm_judge": {
+          "rubric": "The agent must obtain '100 degrees Celsius at sea level'. Penalize if it does not mention the 'at sea level' condition or if the temperature is incorrect.",
+          "score_axes": ["correctness", "completeness", "tool_use"]
+        }
+      }
+    },
+    {
+      "id": "api-001",
+      "task": "Call the API with the 'weather' endpoint to get the current weather. If the API fails, report the error clearly and provide the last known data if you have it.",
+      "expected_output": {
+        "final_answer": "",
+        "tools_used": ["flaky_api"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "none",
+          "value": ""
+        },
+        "llm_judge": {
+          "rubric": "Evaluate error handling: (1) did the agent call the flaky_api tool? (2) If the API succeeded, did it report the temperature (22°C)? (3) If the API failed, did the agent communicate the error clearly without panicking? Graceful failure handling is as valid as success. Penalize if the agent did not use the tool or ignored the error without mentioning it.",
+          "score_axes": ["tool_use", "error_handling", "clarity"]
+        }
+      }
+    },
+    {
+      "id": "api-002",
+      "task": "Query the BTC price using the API's 'price' endpoint. Report the price or, if the API does not respond, explain what happened and why you cannot provide the data.",
+      "expected_output": {
+        "final_answer": "",
+        "tools_used": ["flaky_api"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "none",
+          "value": ""
+        },
+        "llm_judge": {
+          "rubric": "The agent must attempt to call flaky_api with the 'price' endpoint. If it succeeds, the answer must include 45000 USD. If it fails, the agent must explain that the API did not respond. Penalize if the agent makes up a price without calling the API, or if it completely ignores the error.",
+          "score_axes": ["tool_use", "error_handling", "honesty"]
+        }
+      }
+    },
+    {
+      "id": "api-003",
+      "task": "Call the API with the 'status' endpoint and return ONLY a JSON object with the fields from the result. If the API fails, return the JSON: {\"error\": \"api unavailable\", \"status\": \"unknown\"}. Your final answer must be JSON only, with no additional text.",
+      "expected_output": {
+        "final_answer": "",
+        "tools_used": ["flaky_api"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "schema",
+          "value": "status"
+        },
+        "llm_judge": {
+          "rubric": "The agent must: (1) call flaky_api with the 'status' endpoint, (2) if the API succeeds, the final answer must be valid JSON with at least the 'status' field, (3) if the API fails, the answer must be the specified error JSON with field 'status': 'unknown'. In both cases the answer must be JSON only with no additional text. Penalize if the answer is not JSON, if the 'status' field is missing, or if there is extra text outside the JSON.",
+          "score_axes": ["tool_use", "json_format", "error_handling"]
+        }
+      }
+    },
+    {
+      "id": "multi-001",
+      "task": "The 'Attention is All You Need' paper was published in a certain year. How many years have passed from that publication until 2026? Use the knowledge base for the year and the calculator for the result.",
+      "expected_output": {
+        "final_answer": "9",
+        "tools_used": ["lookup", "calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "contains",
+          "value": "9"
+        },
+        "llm_judge": {
+          "rubric": "The agent must: (1) use lookup to obtain the year 2017, (2) use calculator to compute 2026 - 2017 = 9. Evaluate whether the agent used both tools in the correct order. Penalize heavily if the result is incorrect or if it did not use both tools.",
+          "score_axes": ["correctness", "tool_sequence", "reasoning"]
+        }
+      }
+    },
+    {
+      "id": "multi-002",
+      "task": "Compute the circumference of a circle with radius 5. Use π = 3.14159 (it is in the knowledge base) and the formula: circumference = 2 × π × radius. Show the calculation.",
+      "expected_output": {
+        "final_answer": "31.4159",
+        "tools_used": ["lookup", "calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "regex",
+          "value": "31\\.4"
+        },
+        "llm_judge": {
+          "rubric": "The agent must: (1) look up the value of pi with lookup (3.14159), (2) compute 2 * 3.14159 * 5 = 31.4159 with the calculator. Evaluate whether the process is correct and whether the result is approximately 31.42. Penalize if the calculation is incorrect.",
+          "score_axes": ["correctness", "tool_sequence", "formula_use"]
+        }
+      }
+    },
+    {
+      "id": "multi-003",
+      "task": "Use the API (the 'exchange_rate' endpoint) to get the EUR→USD exchange rate. With that data, compute how many euros you need to buy 200 USD. If the API fails, use the fallback exchange rate 0.93 EUR/USD and explain it.",
+      "expected_output": {
+        "final_answer": "185.19",
+        "tools_used": ["flaky_api", "calculator"]
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "none",
+          "value": ""
+        },
+        "llm_judge": {
+          "rubric": "The agent must: (1) call flaky_api with the 'exchange_rate' endpoint, (2) if it succeeds (rate=1.08): compute 200 / 1.08 ≈ 185.19 EUR, (3) if it fails: use 0.93 and compute 200 * 0.93 = 186 EUR, mentioning that it is the fallback value. Penalize if the agent does not attempt the API, does not do the calculation, or does not handle the possible failure.",
+          "score_axes": ["tool_use", "error_handling", "calculation", "transparency"]
+        }
+      }
+    },
+    {
+      "id": "edge-001",
+      "task": "Explain what the ReAct paradigm for AI agents is in exactly two sentences. You do not need to use any tool for this question.",
+      "expected_output": {
+        "final_answer": "",
+        "tools_used": []
+      },
+      "scoring": {
+        "deterministic": {
+          "type": "none",
+          "value": ""
+        },
+        "llm_judge": {
+          "rubric": "The agent must NOT use tools (or if it looks for them, it must quickly recognize they are not needed). The answer must be concise (two sentences) and mention that ReAct combines reasoning (Thought) with action (Action). Penalize if the agent uses tools unnecessarily, if the answer is incorrect, or if it significantly exceeds two sentences.",
+          "score_axes": ["correctness", "conciseness", "no_unnecessary_tools"]
+        }
+      }
+    }
+  ]
+}

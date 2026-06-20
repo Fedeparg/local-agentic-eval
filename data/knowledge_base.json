@@ -1,0 +1,64 @@
+{
+  "facts": [
+    {
+      "key": "capital_france",
+      "question": "capital of France",
+      "answer": "Paris",
+      "category": "geography"
+    },
+    {
+      "key": "python_creator",
+      "question": "creator of Python",
+      "answer": "Guido van Rossum",
+      "category": "technology"
+    },
+    {
+      "key": "transformer_year",
+      "question": "year of the Attention is All You Need paper",
+      "answer": "2017",
+      "category": "artificial intelligence"
+    },
+    {
+      "key": "speed_light",
+      "question": "speed of light",
+      "answer": "299792458 meters per second",
+      "category": "physics"
+    },
+    {
+      "key": "pi_value",
+      "question": "value of pi",
+      "answer": "3.14159265358979",
+      "category": "mathematics"
+    },
+    {
+      "key": "earth_radius",
+      "question": "radius of the Earth",
+      "answer": "6371 kilometers",
+      "category": "astronomy"
+    },
+    {
+      "key": "boiling_water",
+      "question": "boiling temperature of water",
+      "answer": "100 degrees Celsius at sea level",
+      "category": "physics"
+    },
+    {
+      "key": "fibonacci_10",
+      "question": "tenth Fibonacci number",
+      "answer": "55",
+      "category": "mathematics"
+    },
+    {
+      "key": "gpt4_release",
+      "question": "GPT-4 release year",
+      "answer": "2023",
+      "category": "artificial intelligence"
+    },
+    {
+      "key": "go_release",
+      "question": "Go release year",
+      "answer": "2009",
+      "category": "technology"
+    }
+  ]
+}
