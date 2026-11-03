@@ -10,8 +10,8 @@ Built as a self-directed learning project to explore three pillars of applied AI
 
 The harness runs a ReAct (Reasoning + Acting) agent against a dataset of evaluation cases and scores each one using two complementary methods:
 
-- **Deterministic scoring** — exact match, contains, regex, JSON schema validation
-- **LLM-as-judge** — the same local model, in a separate call, evaluates the agent's reasoning trajectory against a case-specific rubric
+- **Deterministic scoring**: exact match, contains, regex, JSON schema validation
+- **LLM-as-judge**: the same local model, in a separate call, evaluates the agent's reasoning trajectory against a case-specific rubric
 
 All cases run concurrently (goroutines + buffered channel + semaphore), and results are compiled into a Markdown report.
 
@@ -67,7 +67,7 @@ Thought: I have the result
 Final Answer: 345
 ```
 
-The loop runs up to `maxSteps` iterations. Tool errors are fed back as `Observation` so the agent can recover — only LLM errors abort the run.
+The loop runs up to `maxSteps` iterations. Tool errors are fed back as `Observation` so the agent can recover; only LLM errors abort the run.
 
 ---
 
@@ -93,7 +93,7 @@ sem     := make(chan struct{}, maxConcurrency) // semaphore: limits parallel LLM
 
 for _, c := range cases {
     wg.Add(1)
-    go func(c Case) {           // c passed by value — avoids the closure bug
+    go func(c Case) {           // c passed by value, which avoids the closure bug
         defer wg.Done()
         sem <- struct{}{}       // acquire slot
         defer func() { <-sem }()
@@ -104,7 +104,7 @@ wg.Wait()
 close(results)
 ```
 
-> "Don't communicate by sharing memory; share memory by communicating." — Rob Pike
+> "Don't communicate by sharing memory; share memory by communicating." (Rob Pike)
 
 ---
 
@@ -164,7 +164,7 @@ go run -race ./cmd/harness/
 
 ## Key Go patterns practiced
 
-- `(T, error)` return pattern — never `panic` in tool code
+- `(T, error)` return pattern, never `panic` in tool code
 - `sync.WaitGroup` + buffered channel for concurrent fan-out
 - Semaphore with `make(chan struct{}, N)` to cap parallelism
 - `json.Unmarshal` into anonymous structs with struct tags
@@ -176,5 +176,5 @@ go run -race ./cmd/harness/
 ## Known limitations
 
 - The parser is line-based: if the LLM breaks the ReAct format (mixing fields on one line), `parseResponse` degrades gracefully but loses precision
-- `qwen2.5:3b` is non-deterministic — results vary between runs (7/14 to 2/14 observed in practice)
+- `qwen2.5:3b` is non-deterministic: results vary between runs (7/14 to 2/14 observed in practice)
 - The calculator evaluates left-to-right without operator precedence (`2 + 3 * 4 = 20`, not `14`)
