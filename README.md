@@ -11,7 +11,7 @@ Built as a self-directed learning project to explore three pillars of applied AI
 The harness runs a ReAct (Reasoning + Acting) agent against a dataset of evaluation cases and scores each one using two complementary methods:
 
 - **Deterministic scoring** — exact match, contains, regex, JSON schema validation
-- **LLM-as-judge** — a second LLM evaluates the agent's reasoning trajectory against a case-specific rubric
+- **LLM-as-judge** — the same local model, in a separate call, evaluates the agent's reasoning trajectory against a case-specific rubric
 
 All cases run concurrently (goroutines + buffered channel + semaphore), and results are compiled into a Markdown report.
 
